@@ -39,7 +39,7 @@ set -x
 kinit -k -t ${KOJI_KEYTAB} ${KRB_PRINCIPAL}
 
 # create a new side-tag
-sidetag_name=$(fedpkg request-side-tag --base-tag ${release}-build)
+sidetag_name=$(fedpkg request-side-tag --base-tag ${release}-build | grep ' created.$' | awk -F\' '{ print $2 }')
 
 # tag the given NVR into the side-tag
 koji tag ${sidetag_name} ${nvr}
