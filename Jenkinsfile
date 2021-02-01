@@ -94,7 +94,7 @@ pipeline {
 
                 sendMessage(type: 'running', artifactId: artifactId, pipelineMetadata: pipelineMetadata, dryRun: isPullRequest())
                 script {
-                    sh("scratch-build.sh ${nvr} ${msg['artifact']['release']}")
+                    sh("./scratch-build.sh ${nvr} ${msg['artifact']['release']}")
                 }
             }
         }
