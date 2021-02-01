@@ -74,7 +74,7 @@ pipeline {
                         }
                     }
 
-                    if (!artifact) {
+                    if (!artifactId) {
                         abort("No trigger components in the Fedora update")
                     }
                 }
