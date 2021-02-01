@@ -2,8 +2,6 @@
 
 @Library('fedora-pipeline-library@e39c66874db516f9c33f052936d78b566b90be53') _
 
-def triggerComponents = ['annobin', 'binutils', 'glibc', 'gcc'] as Set
-
 def msg
 def nvr
 def artifactId
@@ -46,7 +44,8 @@ pipeline {
                        queue: '8d8bb00d-03d6-48e1-936a-05d22c728224'
                    ],
                    checks: [
-                       [field: '$.artifact.release', expectedValue: '^f34$']
+                       [field: '$.artifact.release', expectedValue: '^f34$'],
+                       [field: '$.artifact.builds[0].component', expectedValue: '^(annobin|binutils|glibc|gcc)$']
                    ]
                )
            ]
@@ -66,17 +65,9 @@ pipeline {
                         abort('Bad input, nothing to do.')
                     }
 
-                    msg['artifact']['builds'].any { kojiBuild ->
-                        if (kojiBuild['component'] in triggerComponents) {
-                            artifactId = "koji-build:${kojiBuild['task_id']}"
-                            nvr = kojiBuild['nvr']
-                            return true
-                        }
-                    }
-
-                    if (!artifactId) {
-                        abort("No trigger components in the Fedora update")
-                    }
+                    def kojiBuild = msg['artifact']['builds'][0]
+                    artifactId = "koji-build:${kojiBuild['task_id']}"
+                    nvr = kojiBuild['nvr']
                 }
             }
         }
