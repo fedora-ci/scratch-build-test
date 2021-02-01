@@ -39,11 +39,11 @@ set -x
 kinit -k -t ${KOJI_KEYTAB} ${KRB_PRINCIPAL}
 
 # create a new side-tag
-sidetag_name=$(fedpkg request-side-tag --base-tag ${release}-build | grep ' created.$' | awk -F\' '{ print $2 }')
+sidetag_name=$(fedpkg request-side-tag --base-tag ${build_target} | grep ' created.$' | awk -F\' '{ print $2 }')
 
 # tag the given NVR into the side-tag
 koji tag ${sidetag_name} ${nvr}
 
 # scratch-build dependent component(s)
 # kernel:
-koji build --scratch --fail-fast ${ARCH_OVERRIDE:+--arch-override=$ARCH_OVERRIDE} ${build_target} "${DIST_GIT_URL}/rpms/kernel#master"
+koji build --scratch --fail-fast ${ARCH_OVERRIDE:+--arch-override=$ARCH_OVERRIDE} ${sidetag_name} "${DIST_GIT_URL}/rpms/kernel#master"
