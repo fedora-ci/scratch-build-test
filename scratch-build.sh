@@ -46,4 +46,4 @@ koji tag ${sidetag_name} ${nvr}
 
 # scratch-build dependent component(s)
 # kernel:
-koji build --scratch --wait --fail-fast ${ARCH_OVERRIDE:+--arch-override=$ARCH_OVERRIDE} ${sidetag_name} "${DIST_GIT_URL}/rpms/kernel#master"
+koji build --scratch --wait --fail-fast ${ARCH_OVERRIDE:+--arch-override=$ARCH_OVERRIDE} ${sidetag_name} "git+${DIST_GIT_URL}/rpms/kernel#master"
