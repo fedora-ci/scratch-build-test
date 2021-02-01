@@ -61,10 +61,10 @@ pipeline {
         stage('Prepare') {
             steps {
                 script {
-                    if (!params.CI_MESSAGE) {
+                    msg = readJSON text: params.CI_MESSAGE
+                    if (!msg) {
                         abort('Bad input, nothing to do.')
                     }
-                    msg = readJSON text: params.CI_MESSAGE
 
                     msg['artifact']['builds'].any { kojiBuild ->
                         if (kojiBuild['component'] in triggerComponents) {
