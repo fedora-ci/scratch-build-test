@@ -27,7 +27,7 @@ def pipelineMetadata = [
 pipeline {
 
     agent {
-        label 'dist-git-build'
+        label 'node-generic-centos8-2'
     }
 
     options {
