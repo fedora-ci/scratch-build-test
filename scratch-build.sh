@@ -59,15 +59,14 @@ function wait_and_get_exit_codes() {
 set +e
 
 # scratch-build dependent component(s)
-# kernel:
+# kernel, lua:
 
 commands=(
-    "koji build --scratch --wait --fail-fast ${ARCH_OVERRIDE:+--arch-override=$ARCH_OVERRIDE} ${sidetag_name} \"git+${DIST_GIT_URL}/rpms/sshpass#rawhide\""
-    "koji build --scratch --wait --fail-fast ${ARCH_OVERRIDE:+--arch-override=$ARCH_OVERRIDE} ${sidetag_name} \"git+${DIST_GIT_URL}/rpms/spindown#rawhide\""
+    "koji build --scratch --wait --fail-fast ${ARCH_OVERRIDE:+--arch-override=$ARCH_OVERRIDE} ${sidetag_name} \"git+${DIST_GIT_URL}/rpms/kernel#rawhide\""
+    "koji build --scratch --wait --fail-fast ${ARCH_OVERRIDE:+--arch-override=$ARCH_OVERRIDE} ${sidetag_name} \"git+${DIST_GIT_URL}/rpms/lua#rawhide\""
 )
 
 clen=`expr "${#commands[@]}" - 1`
-
 children_pids=()
 for i in `seq 0 $clen`; do
     (echo "${commands[$i]}" | bash) &
