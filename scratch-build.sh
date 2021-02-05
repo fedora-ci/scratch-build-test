@@ -44,6 +44,37 @@ sidetag_name=$(fedpkg request-side-tag --base-tag ${build_target} | grep ' creat
 # tag the given NVR into the side-tag
 koji tag ${sidetag_name} ${nvr}
 
+function wait_and_get_exit_codes() {
+    children=("$@")
+    EXIT_CODE=0
+    for job in "${children[@]}"; do
+       CODE=0;
+       wait ${job} || CODE=$?
+       if [[ "${CODE}" != "0" ]]; then
+           EXIT_CODE=1;
+       fi
+   done
+}
+
+set +e
+
 # scratch-build dependent component(s)
 # kernel:
-koji build --scratch --wait --fail-fast ${ARCH_OVERRIDE:+--arch-override=$ARCH_OVERRIDE} ${sidetag_name} "git+${DIST_GIT_URL}/rpms/kernel#rawhide"
+
+commands=(
+    "koji build --scratch --wait --fail-fast ${ARCH_OVERRIDE:+--arch-override=$ARCH_OVERRIDE} ${sidetag_name} \"git+${DIST_GIT_URL}/rpms/sshpass#rawhide\""
+    "koji build --scratch --wait --fail-fast ${ARCH_OVERRIDE:+--arch-override=$ARCH_OVERRIDE} ${sidetag_name} \"git+${DIST_GIT_URL}/rpms/spindown#rawhide\""
+)
+
+clen=`expr "${#commands[@]}" - 1`
+
+children_pids=()
+for i in `seq 0 $clen`; do
+    (echo "${commands[$i]}" | bash) &
+    children_pids+=("$!")
+done
+
+EXIT_CODE=0
+wait_and_get_exit_codes "${children_pids[@]}"
+exit $EXIT_CODE
+
