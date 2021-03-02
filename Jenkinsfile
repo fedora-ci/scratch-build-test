@@ -44,7 +44,7 @@ pipeline {
                        queue: '8d8bb00d-03d6-48e1-936a-05d22c728224'
                    ],
                    checks: [
-                       [field: '$.artifact.release', expectedValue: '^f34$'],
+                       [field: '$.artifact.release', expectedValue: '^f3[4-9]{1}$'],
                        [field: '$.artifact.builds[0].component', expectedValue: '^(annobin|binutils|glibc|gcc|colorgcc)$']
                    ]
                )
