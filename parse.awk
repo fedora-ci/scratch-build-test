@@ -1,13 +1,13 @@
 BEGIN {
-    m = 0
+    d = 0
+    f = 0
 }
 
 /^[ 0-9]+free[ 0-9]+open[ 0-9]+done[ 0-9]+failed$/ {
-    if($7 > m) {
-        m = $7
-    }
+    d += $5
+    f += $7
 }
 
 END {
-    print m
+    print (((d == 0) || (f > 0)) ? 1 : 0)
 }
