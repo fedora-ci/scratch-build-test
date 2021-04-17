@@ -1,9 +1,11 @@
 BEGIN {
-    m=0
+    m = 0
 }
 
 /^[ 0-9]+free[ 0-9]+open[ 0-9]+done[ 0-9]+failed$/ {
-    m+=$7
+    if($7 > m) {
+        m = $7
+    }
 }
 
 END {

@@ -47,8 +47,8 @@ koji tag ${sidetag_name} ${nvr}
 # scratch-build dependent component(s)
 export LOG1=$(mktemp)
 export LOG2=$(mktemp)
-( koji build --scratch --wait --fail-fast ${ARCH_OVERRIDE:+--arch-override=$ARCH_OVERRIDE} ${sidetag_name} "git+${DIST_GIT_URL}/rpms/kernel#rawhide" >> $LOG1 ) &
-( koji build --scratch --wait --fail-fast ${ARCH_OVERRIDE:+--arch-override=$ARCH_OVERRIDE} ${sidetag_name} "git+${DIST_GIT_URL}/rpms/lua#rawhide" >> $LOG2 ) &
+( koji build --scratch --wait --fail-fast ${ARCH_OVERRIDE:+--arch-override=$ARCH_OVERRIDE} ${sidetag_name} "git+${DIST_GIT_URL}/rpms/kernel#rawhide" |& tee $LOG1 ) &
+( koji build --scratch --wait --fail-fast ${ARCH_OVERRIDE:+--arch-override=$ARCH_OVERRIDE} ${sidetag_name} "git+${DIST_GIT_URL}/rpms/lua#rawhide" |& tee $LOG2 ) &
 wait
 EXIT_CODE=$(awk -f parse.awk $LOG1 $LOG2)
 rm $LOG1 $LOG2
