@@ -40,9 +40,15 @@ kinit -k -t ${KOJI_KEYTAB} ${KRB_PRINCIPAL}
 
 # create a new side-tag
 sidetag_name=$(fedpkg request-side-tag --base-tag ${build_target} | grep ' created.$' | awk -F\' '{ print $2 }')
+date
 
 # tag the given NVR into the side-tag
 koji tag ${sidetag_name} ${nvr}
+date
+
+# wait for repo regeneration
+koji wait-repo --build ${nvr} ${sidetag_name}
+date
 
 # scratch-build dependent component(s)
 export LOG1=$(mktemp)
@@ -50,6 +56,8 @@ export LOG2=$(mktemp)
 ( koji build --scratch --wait --fail-fast ${ARCH_OVERRIDE:+--arch-override=$ARCH_OVERRIDE} ${sidetag_name} "git+${DIST_GIT_URL}/rpms/kernel#rawhide" |& tee $LOG1 ) &
 ( koji build --scratch --wait --fail-fast ${ARCH_OVERRIDE:+--arch-override=$ARCH_OVERRIDE} ${sidetag_name} "git+${DIST_GIT_URL}/rpms/lua#rawhide" |& tee $LOG2 ) &
 wait
+date
+
 EXIT_CODE=$(awk -f parse.awk $LOG1 $LOG2)
 rm $LOG1 $LOG2
 
