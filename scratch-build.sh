@@ -43,6 +43,8 @@ sidetag_name=$(fedpkg request-side-tag --base-tag ${build_target} | grep ' creat
 date
 
 # tag the given NVR into the side-tag
+# this creates a task in koji, should be visible here:
+# https://koji.fedoraproject.org/koji/tasks?method=newRepo&state=active&view=tree&order=-id
 koji tag ${sidetag_name} ${nvr}
 date
 
