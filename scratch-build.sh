@@ -3,8 +3,7 @@
 # Scratch-build components in a side-tag
 
 # List the components to rebuild
-#COMPONENT_LIST="kernel lua opencryptoki"
-COMPONENT_LIST="coreutils elfutils"
+COMPONENT_LIST="kernel lua opencryptoki"
 
 # Parameters:
 # $1 - NVR
