@@ -17,10 +17,6 @@ if [ $# -ne 2 ]; then
     exit 101
 fi
 
-true v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v
-env | sort
-true ^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^
-
 nvr=${1}
 release=${2}
 
@@ -53,17 +49,16 @@ koji tag ${sidetag_name} ${nvr}
 date
 
 # wait for repo regeneration
-# koji wait-repo --build ${nvr} ${sidetag_name}
-# date
+koji wait-repo --build ${nvr} ${sidetag_name}
+date
 
 # scratch-build dependent component(s)
 export LOG1=$(mktemp)
 export LOG2=$(mktemp)
 export LOG3=$(mktemp)
-#( ./worker.sh kernel ${release} ${sidetag_name} |& tee ${LOG1} ) &
-#( ./worker.sh lua ${release} ${sidetag_name} |& tee ${LOG2} ) &
-#( ./worker.sh opencryptoki ${release} ${sidetag_name} |& tee ${LOG3} ) &
-( ./worker.sh elfutils ${release} ${sidetag_name} |& tee ${LOG3} ) &
+( ./worker.sh kernel ${release} ${sidetag_name} |& tee ${LOG1} ) &
+( ./worker.sh lua ${release} ${sidetag_name} |& tee ${LOG2} ) &
+( ./worker.sh opencryptoki ${release} ${sidetag_name} |& tee ${LOG3} ) &
 wait
 date
 

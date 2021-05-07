@@ -6,10 +6,6 @@ _name=$1
 _branch=$2
 _sidetag=$3
 
-true v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v
-env | sort
-true ^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^
-
 _tmpd=$(mktemp -d)
 pushd $_tmpd
 counter=0
@@ -21,6 +17,8 @@ done
 cd $_name
 
 # For rawhide, we use "latest released" branch
+# because rawhide isn't always safely rebuildable
+# and that was causing false positives of this test
 fedpkg switch-branch | fgrep $_branch ||
     _branch=$(fedpkg switch-branch | grep -Po 'f\d\d' | tail -1)
 
