@@ -17,6 +17,10 @@ if [ $# -ne 2 ]; then
     exit 101
 fi
 
+true v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v
+env | sort
+true ^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^
+
 nvr=${1}
 release=${2}
 
@@ -56,14 +60,15 @@ date
 export LOG1=$(mktemp)
 export LOG2=$(mktemp)
 export LOG3=$(mktemp)
-( koji build --scratch --wait --fail-fast ${ARCH_OVERRIDE:+--arch-override=$ARCH_OVERRIDE} ${sidetag_name} "git+${DIST_GIT_URL}/rpms/kernel#rawhide" |& tee $LOG1 ) &
-( koji build --scratch --wait --fail-fast ${ARCH_OVERRIDE:+--arch-override=$ARCH_OVERRIDE} ${sidetag_name} "git+${DIST_GIT_URL}/rpms/lua#rawhide" |& tee $LOG2 ) &
-( koji build --scratch --wait --fail-fast ${ARCH_OVERRIDE:+--arch-override=$ARCH_OVERRIDE} ${sidetag_name} "git+${DIST_GIT_URL}/rpms/opencryptoki#rawhide" |& tee $LOG3 ) &
+#( ./worker.sh kernel ${release} ${sidetag_name} |& tee ${LOG1} ) &
+#( ./worker.sh lua ${release} ${sidetag_name} |& tee ${LOG2} ) &
+#( ./worker.sh opencryptoki ${release} ${sidetag_name} |& tee ${LOG3} ) &
+( ./worker.sh elfutils ${release} ${sidetag_name} |& tee ${LOG3} ) &
 wait
 date
 
-EXIT_CODE=$(awk -f parse.awk $LOG1 $LOG2 $LOG3)
-rm $LOG1 $LOG2 $LOG3
+EXIT_CODE=$(awk -f parse.awk ${LOG1} ${LOG2} ${LOG3})
+rm ${LOG1} ${LOG2} ${LOG3}
 
-exit $EXIT_CODE
+exit ${EXIT_CODE}
 
