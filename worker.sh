@@ -19,6 +19,11 @@ until fedpkg clone --anonymous $_name; do
     sleep 120
 done
 cd $_name
+
+# For rawhide, we use "latest released" branch
+fedpkg switch-branch | fgrep $branch ||
+    branch=$(fedpkg switch-branch | grep -Po 'f\d\d' | tail -1)
+
 fedpkg switch-branch $_branch
 fedpkg build --scratch --fail-fast --target=$_sidetag
 popd
