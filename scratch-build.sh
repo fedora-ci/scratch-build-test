@@ -61,7 +61,7 @@ TMPFILES=""
 for comp in ${COMPONENT_LIST}; do
     export t=$(mktemp /tmp/tmp-${comp}-XXXXXXXX)
     TMPFILES="${TMPFILES} ${t}"
-    ( ./worker.sh kernel ${release} ${sidetag_name} |& tee ${t} ) &
+    ( ./worker.sh ${comp} ${release} ${sidetag_name} |& tee ${t} ) &
     unset t
 done
 wait
