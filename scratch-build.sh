@@ -2,6 +2,10 @@
 
 # Scratch-build components in a side-tag
 
+# List the components to rebuild
+#COMPONENT_LIST="kernel lua opencryptoki"
+#COMPONENT_LIST="coreutils elfutils"
+
 # Parameters:
 # $1 - NVR
 # $2 - target release, e.g.: 'f34'
@@ -52,18 +56,23 @@ date
 koji wait-repo --build ${nvr} ${sidetag_name}
 date
 
-# scratch-build dependent component(s)
-export LOG1=$(mktemp)
-export LOG2=$(mktemp)
-export LOG3=$(mktemp)
-( ./worker.sh kernel ${release} ${sidetag_name} |& tee ${LOG1} ) &
-( ./worker.sh lua ${release} ${sidetag_name} |& tee ${LOG2} ) &
-( ./worker.sh opencryptoki ${release} ${sidetag_name} |& tee ${LOG3} ) &
+# Run the scratchbuilds in parallel
+TMPFILES=""
+for comp in ${COMPONENT_LIST}; do
+    export t=$(mktemp /tmp/tmp-${comp}-XXXXXXXX)
+    TMPFILES="${TMPFILES} ${t}"
+    ( ./worker.sh kernel ${release} ${sidetag_name} |& tee ${t} ) &
+    unset t
+done
 wait
 date
 
-EXIT_CODE=$(awk -f parse.awk ${LOG1} ${LOG2} ${LOG3})
-rm ${LOG1} ${LOG2} ${LOG3}
+# Check for build errors
+EXIT_CODE=0
+for t in ${TMPFILES}; do
+    e=$(awk -f parse.awk ${t})
+    EXIT_CODE=$((EXIT_CODE + e))
+    rm ${t}
+done
 
 exit ${EXIT_CODE}
-

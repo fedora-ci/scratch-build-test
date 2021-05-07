@@ -20,7 +20,11 @@ cd $_name
 # because rawhide isn't always safely rebuildable
 # and that was causing false positives of this test
 fedpkg switch-branch | fgrep $_branch ||
-    _branch=$(fedpkg switch-branch | grep -Po 'f\d\d' | tail -1)
+    _branch=$(fedpkg switch-branch |\
+              grep -P '^\ +origin/f\d\d$' |\
+              grep -Po 'f\d\d' |\
+              sort |\
+              tail -1)
 
 fedpkg switch-branch $_branch
 fedpkg build --scratch --fail-fast --target=$_sidetag
