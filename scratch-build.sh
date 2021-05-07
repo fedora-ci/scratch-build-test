@@ -4,7 +4,7 @@
 
 # List the components to rebuild
 #COMPONENT_LIST="kernel lua opencryptoki"
-#COMPONENT_LIST="coreutils elfutils"
+COMPONENT_LIST="coreutils elfutils"
 
 # Parameters:
 # $1 - NVR
