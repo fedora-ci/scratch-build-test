@@ -53,8 +53,8 @@ koji tag ${sidetag_name} ${nvr}
 date
 
 # wait for repo regeneration
-koji wait-repo --build ${nvr} ${sidetag_name}
-date
+# koji wait-repo --build ${nvr} ${sidetag_name}
+# date
 
 # scratch-build dependent component(s)
 export LOG1=$(mktemp)
