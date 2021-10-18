@@ -74,4 +74,7 @@ for t in ${TMPFILES}; do
     rm ${t}
 done
 
+# remove the side-tag as it is no longer needed
+fedpkg remove-side-tag ${sidetag_name}
+
 exit ${EXIT_CODE}
