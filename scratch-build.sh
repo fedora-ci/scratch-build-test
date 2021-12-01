@@ -77,13 +77,19 @@ date
 
 exit_code=$(awk -f parse.awk ${buildlogs})
 
-# show the buildsystem task URLs
-grep 'https:\/\/[^\ ]*'  ${buildlogs}
-
-rm ${buildlogs}
-
 # try to remove the side-tag as it is no longer needed
 ${rhpkg} remove-side-tag ${sidetag_name} ||:
+
+set +x
+
+# show the buildsystem task URLs
+echo "Test results for ${nvr} ${release}"
+echo "----------------------------------------------------------------"
+fgrep 'https:'  ${buildlogs}
+echo "----------------------------------------------------------------"
+
+# clean up
+rm ${buildlogs}
 
 exit ${exit_code}
 
