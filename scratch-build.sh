@@ -26,7 +26,7 @@ else
     # KRB_PRINCIPAL - kerberos principal
     # DIST_GIT_URL - dist-git URL
     # ARCH_OVERRIDE - (optional) only build for specified architectures (example: "x86_64,i686")
-    env | sort
+    # env | sort
 
     if [ -z "${KOJI_KEYTAB}" ]; then
         echo "Missing keytab, cannot continue..."
