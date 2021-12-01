@@ -70,7 +70,7 @@ for component in ${components}; do
     export buildlog=$(mktemp buildlog.${component}.XXXXXXXXXX)
     buildlogs="${buildlogs} ${buildlog}"
     ( ./worker.sh ${component} ${release} ${sidetag_name} |& tee ${buildlog} ) &
-    unset %{buildlog}
+    unset ${buildlog}
 done
 wait
 date
