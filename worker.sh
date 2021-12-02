@@ -28,7 +28,8 @@ fedpkg switch-branch | fgrep $_branch ||
 
 fedpkg switch-branch $_branch
 # the glibc spec contains comments that CentOS 8 fails to parse
-sed -i '/^%dnl /'d glibc.spec ||:
+sed -i '/^%dnl /'d glibc.spec && \
+    git commit -am 'temporary changes' ||:
 fedpkg build --scratch --fail-fast --target=$_sidetag
 popd
 rm -rf $_tmpd
