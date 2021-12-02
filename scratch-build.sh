@@ -53,7 +53,9 @@ set -x
 if echo ${nvr} | fgrep -q systemtap; then
     components="glibc qemu"
 else
-    components="kernel lua opencryptoki strace"
+    # Skip building strace temporarily because of
+    # https://bugzilla.redhat.com/show_bug.cgi?id=1929836
+    components="kernel lua opencryptoki"
 fi
 
 # create a new side-tag
