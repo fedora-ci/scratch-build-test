@@ -27,12 +27,14 @@ fedpkg switch-branch | fgrep $_branch ||
               tail -1)
 
 fedpkg switch-branch $_branch
-# the glibc spec contains comments that CentOS 8 fails to parse
-sed -i '/^%dnl /'d glibc.spec && ( \
-    git config --global user.email "john@example.com"; \
-    git config --global user.name "John Example"; \
-    git commit -am 'temporary changes' ) ||:
-fedpkg build --scratch --fail-fast --target=$_sidetag
+if [ "$_name" == "glibc" ] && grep '^%dnl ' glibc.spec; then
+    # The glibc specfile contains %dnl macros,
+    # CentOS 8 fedpkg can't parse it.
+    grep sed -i '/^%dnl /'d glibc.spec
+    fedpkg build --scratch --fail-fast --srpm --target=$_sidetag
+else
+    fedpkg build --scratch --fail-fast --target=$_sidetag
+fi
 popd
 rm -rf $_tmpd
 
