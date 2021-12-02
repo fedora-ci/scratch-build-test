@@ -41,8 +41,13 @@ else
     kinit -k -t ${KOJI_KEYTAB} ${KRB_PRINCIPAL}
 fi
 
-set -x
+# identify the worker
+echo "----------------------------------------------------------------"
+cat /etc/*-release
+rpm -qf `which ${rhpkg}`
+echo "----------------------------------------------------------------"
 
+set -x
 # components under rebuild test
 if echo ${nvr} | fgrep -q systemtap; then
     components="glibc qemu"
