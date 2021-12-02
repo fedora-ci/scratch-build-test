@@ -48,6 +48,7 @@ rpm -qf `which ${rhpkg}`
 echo "----------------------------------------------------------------"
 
 set -x
+
 # components under rebuild test
 if echo ${nvr} | fgrep -q systemtap; then
     components="glibc qemu"
