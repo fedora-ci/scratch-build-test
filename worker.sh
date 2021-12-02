@@ -30,7 +30,7 @@ fedpkg switch-branch $_branch
 if [ "$_name" == "glibc" ] && grep '^%dnl ' glibc.spec; then
     # The glibc specfile contains %dnl macros,
     # CentOS 8 fedpkg can't parse it.
-    grep sed -i '/^%dnl /'d glibc.spec
+    sed -i '/^%dnl /'d glibc.spec
     fedpkg build --scratch --fail-fast --srpm --target=$_sidetag
 else
     fedpkg build --scratch --fail-fast --target=$_sidetag
