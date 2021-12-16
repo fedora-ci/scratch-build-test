@@ -51,7 +51,8 @@ set -x
 
 # components under rebuild test
 if echo ${nvr} | fgrep -q systemtap; then
-    components="glibc qemu"
+    # Skip building qemu, since it builds too long for a gating test
+    components="glibc"
 else
     # Skip building strace temporarily because of
     # https://bugzilla.redhat.com/show_bug.cgi?id=1929836
