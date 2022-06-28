@@ -50,9 +50,11 @@ fi
 set -x
 
 # components under rebuild test
-if echo ${nvrs} | fgrep -q systemtap; then
+if [[ ${nvrs} == *systemtap* ]]; then
     # Skip building qemu, since it builds too long for a gating test
     components="glibc"
+elif [[ ${nvrs} == *redhat-rpm-config* ]]; then
+    components="zlib"
 else
     # Skip building strace temporarily because of
     # https://bugzilla.redhat.com/show_bug.cgi?id=1929836
