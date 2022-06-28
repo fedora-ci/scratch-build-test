@@ -5,6 +5,7 @@
 def msg
 def nvr
 def artifactId
+def allBuilds
 
 
 // testcase name: baseos-qe.koji-build.scratch-build.validation
@@ -68,6 +69,16 @@ pipeline {
                     def kojiBuild = msg['artifact']['builds'][0]
                     artifactId = "koji-build:${kojiBuild['task_id']}"
                     nvr = kojiBuild['nvr']
+
+                    def allBuildsJson = msg['artifact']['builds']
+                    allBuilds = ""
+                    allBuildsJson.each { key ->
+                        if(!allBuilds) {
+                            allBuilds = "${key['nvr']}"
+                        } else {
+                            allBuilds = "${allBuilds},${key['nvr']}"
+                        }
+                    }
                 }
             }
         }
@@ -85,7 +96,7 @@ pipeline {
 
                 sendMessage(type: 'running', artifactId: artifactId, pipelineMetadata: pipelineMetadata, dryRun: isPullRequest())
                 script {
-                    sh("./scratch-build.sh ${nvr} ${msg['artifact']['release']}")
+                    sh("./scratch-build.sh ${allBuilds} ${msg['artifact']['release']}")
                 }
             }
         }

@@ -10,7 +10,7 @@ brew=koji
 if [ $# -ne 2 ]; then
     echo "Manually running scratch-build test..."
     echo "----------------------------------------------------------------"
-    read -p "NVR (e.g. gcc-11.2.1-6.1.el9) : " nvr
+    read -p "Comma separated NVRs (e.g. gcc-11.2.1-6.1.el9) : " nvrs
     read -p "target release (e.g. rhel-9.0.0) : " release
 else
     set -x
@@ -18,7 +18,7 @@ else
     # Parameters:
     # $1 - NVR
     # $2 - target release, e.g.: 'f34'
-    nvr=${1}
+    nvrs=${1}
     release=${2}
 
     # Required environment variables:
@@ -50,7 +50,7 @@ fi
 set -x
 
 # components under rebuild test
-if echo ${nvr} | fgrep -q systemtap; then
+if echo ${nvrs} | fgrep -q systemtap; then
     # Skip building qemu, since it builds too long for a gating test
     components="glibc"
 else
@@ -65,12 +65,16 @@ sidetag_name=$(${rhpkg} request-side-tag --base-tag ${build_target} | grep ' cre
 date
 
 # tag the given NVR into the side-tag
-${brew} tag ${sidetag_name} ${nvr}
+for nvr in ${nvrs//,/\ }; do
+    ${brew} tag ${sidetag_name} ${nvr}
+done
 date
 
 # wait for repo regeneration
-${brew} wait-repo --build ${nvr} ${sidetag_name} || \
-${brew} wait-repo --build ${nvr} ${sidetag_name}
+for nvr in ${nvrs//,/\ }; do
+    ${brew} wait-repo --build ${nvr} ${sidetag_name} || \
+    ${brew} wait-repo --build ${nvr} ${sidetag_name}
+done
 date
 
 # scratch-build dependent component(s)
@@ -92,7 +96,7 @@ ${rhpkg} remove-side-tag ${sidetag_name} ||:
 set +x
 
 # show the buildsystem task URLs
-echo "Test results for ${nvr} ${release}"
+echo "Test results for ${nvrs} ${release}"
 echo "----------------------------------------------------------------"
 fgrep 'https:'  ${buildlogs}
 echo "----------------------------------------------------------------"
