@@ -46,7 +46,7 @@ pipeline {
                    ],
                    checks: [
                        [field: '$.artifact.release', expectedValue: '^f3[4-9]{1}$'],
-                       [field: '$.artifact.builds[0].component', expectedValue: '^(annobin|binutils|glibc|gcc|llvm|systemtap|redhat-rpm-config)$']
+                       [field: '$.artifact.builds[0].component', expectedValue: '^(annobin|binutils|glibc|gcc|llvm|clang|systemtap|redhat-rpm-config)$']
                    ]
                )
            ]
