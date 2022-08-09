@@ -55,7 +55,7 @@ if [[ ${nvrs} == *systemtap* ]]; then
     components="glibc"
 elif [[ ${nvrs} == *redhat-rpm-config* ]]; then
     components="zlib"
-elif [[ ${nvrs} == llvm -o ${nvrs} == clang ]]; then
+elif [ ${nvrs} == llvm -o ${nvrs} == clang ]; then
     components="clang llvm kernel"
 else
     # Skip building strace temporarily because of
