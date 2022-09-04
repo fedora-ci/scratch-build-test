@@ -1,5 +1,8 @@
 #!/bin/bash
 
+trap "exit 1" TERM
+export TOP_PID=$$
+
 # Scratch-build components in a side-tag
 set -e
 
@@ -63,9 +66,31 @@ else
     components="kernel lua opencryptoki"
 fi
 
+# supported architectures
+testarches="aarch64 i686 ppc64le s390x x86_64"
+
+# place to store the buildsystem test logs
+testlogdir=`mktemp -d`
+
+do_rebuilds()
+{
+    _stage=$1
+    for testarch in ${testarches}; do
+        for component in ${components}; do
+            export buildlog="${testlogdir}/${component}.${testarch}.${_stage}"
+            ( ./worker.sh ${component} ${release} ${sidetag_name} ${testarch} |& tee ${buildlog} ) &
+        done
+    done
+    wait
+}
+
 # create a new side-tag
 build_target="${release}-build"
 sidetag_name=$(${rhpkg} request-side-tag --base-tag ${build_target} | grep ' created.$' | awk -F\' '{ print $2 }')
+date
+
+# Set up a baseline by rebuilding in a side tag not having component under test
+do_rebuilds 'baseline'
 date
 
 # tag the given NVR into the side-tag
@@ -81,32 +106,96 @@ for nvr in ${nvrs//,/\ }; do
 done
 date
 
-# scratch-build dependent component(s)
-buildlogs=""
+# Run the actual rebuild tests within a buildroot having the component under test
+do_rebuilds 'test'
+date
+
+
+## Evaluate test results
+
+set +x
+
+testresult()
+{
+    _log=$1
+    if ! test -f ${_log}; then
+        echo "ERROR: Test log doesn't exist" 1>&2
+        kill -s TERM $TOP_PID
+    fi
+    if grep -qE '^[0-9]+\ build.*completed\ successfully$' ${_log}; then
+        echo "PASS"
+    elif grep -qE '^[0-9]+\ build.*failed$' ${_log}; then
+        echo "FAIL"
+    else
+        echo "ERROR: Missing expected pattern in ${_log}" 1>&2
+        kill -s TERM $TOP_PID
+    fi
+}
+
+buildurl()
+{
+    _log=$1
+    echo -n "  $(basename $_log) "
+    fgrep 'https://koji.fedoraproject.org/koji/taskinfo' $_log
+}
+
+exit_code=0
+test_cnt=0
+fail_cnt=0
 for component in ${components}; do
-    export buildlog=$(mktemp buildlog.${component}.XXXXXXXXXX)
-    buildlogs="${buildlogs} ${buildlog}"
-    ( ./worker.sh ${component} ${release} ${sidetag_name} |& tee ${buildlog} ) &
-    unset buildlog
+    for testarch in ${testarches}; do
+        test_cnt=$((test_cnt + 1))
+        _baselog="$testlogdir/${component}.${testarch}.baseline"
+        _testlog="$testlogdir/${component}.${testarch}.test"
+        r1=$(testresult $_baselog)
+        r2=$(testresult $_testlog)
+        if [[ "$r1" == "FAIL" ]] && [[ "$r2" == "FAIL" ]]; then
+            echo "WARNING: ${component}.${testarch} failed rebuilds"
+            buildurl $_baselog
+            buildurl $_testlog
+        elif [[ "$r1" == "FAIL" ]] && [[ "$r2" == "PASS" ]]; then
+            echo "WARNING: ${component}.${testarch} improvement"
+            buildurl $_baselog
+            buildurl $_testlog
+        elif [[ "$r1" == "PASS" ]] && [[ "$r2" == "PASS" ]]; then
+            echo "INFO: ${component}.${testarch} passed rebuilds"
+            buildurl $_baselog
+            buildurl $_testlog
+        elif [[ "$r1" == "PASS" ]] && [[ "$r2" == "FAIL" ]]; then
+            echo "ERROR: ${component}.${testarch} regression"
+            echo "vvvvvvvvvvvv  BASELINE  vvvvvvvvvvvv"
+            cat $_baselog
+            echo "^^^^^^^^^^^^  BASELINE  ^^^^^^^^^^^^"
+            echo "vvvvvvvvvvvv  TEST  vvvvvvvvvvvv"
+            cat $_testlog
+            echo "^^^^^^^^^^^^  TEST  ^^^^^^^^^^^^"
+            exit_code=1
+            fail_cnt=$((fail_cnt + 1))
+        else
+            echo "ERROR: We should never get here" 1>&2
+            kill -s TERM $TOP_PID
+        fi
+    done
 done
 wait
 date
 
-exit_code=$(awk -f parse.awk ${buildlogs})
+if test $fail_cnt -ge $((test_cnt / 2)); then
+    echo "ERROR: Failure rate too high"
+    echo "$fail_cnt tests out of $test_cnt failed"
+    exit_code=1
+fi
 
 # try to remove the side-tag as it is no longer needed
 ${rhpkg} remove-side-tag ${sidetag_name} ||:
 
 set +x
 
-# show the buildsystem task URLs
-echo "Test results for ${nvrs} ${release}"
-echo "----------------------------------------------------------------"
-fgrep 'https:'  ${buildlogs}
-echo "----------------------------------------------------------------"
-
-# clean up
-rm ${buildlogs}
+if test $exit_code -eq 0; then
+    echo "TESTING PASSED"
+else
+    echo "TESTING FAILED"
+fi
 
 exit ${exit_code}
 
