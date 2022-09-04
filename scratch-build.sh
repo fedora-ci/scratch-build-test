@@ -153,6 +153,7 @@ for component in ${components}; do
             echo "WARNING: ${component}.${testarch} failed rebuilds"
             buildurl $_baselog
             buildurl $_testlog
+            fail_cnt=$((fail_cnt + 1))
         elif [[ "$r1" == "FAIL" ]] && [[ "$r2" == "PASS" ]]; then
             echo "WARNING: ${component}.${testarch} improvement"
             buildurl $_baselog
@@ -179,6 +180,7 @@ for component in ${components}; do
 done
 wait
 date
+
 
 if test $fail_cnt -ge $((test_cnt / 2)); then
     echo "ERROR: Failure rate too high"
