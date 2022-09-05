@@ -61,9 +61,7 @@ elif [[ ${nvrs} == *redhat-rpm-config* ]]; then
 elif [ ${nvrs} == llvm -o ${nvrs} == clang ]; then
     components="clang llvm kernel"
 else
-    # Skip building strace temporarily because of
-    # https://bugzilla.redhat.com/show_bug.cgi?id=1929836
-    components="kernel lua opencryptoki"
+    components="kernel lua opencryptoki strace"
 fi
 
 # supported architectures
