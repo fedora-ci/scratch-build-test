@@ -197,5 +197,10 @@ else
     echo "TESTING FAILED"
 fi
 
+# Clean up $testlogdir for automated runs
+if [ $# -eq 2 ]; then
+    rm -rf $testlogdir
+fi
+
 exit ${exit_code}
 
