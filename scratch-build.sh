@@ -134,7 +134,10 @@ buildurl()
 {
     _log=$1
     echo -n "  $(basename $_log) "
-    fgrep 'https://koji.fedoraproject.org/koji/taskinfo' $_log
+    fgrep 'https://koji.fedoraproject.org/koji/taskinfo' $_log || (
+        echo "ERROR: Expected buildsystem URL not found in $_log"
+        kill -s TERM $TOP_PID
+    )
 }
 
 exit_code=0
