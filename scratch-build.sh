@@ -229,5 +229,5 @@ if [ $# -eq 2 ]; then
     rm -rf $testlogdir
 fi
 
-exit ${exit_code}
+email_cleanup_exit ${exit_code}
 
