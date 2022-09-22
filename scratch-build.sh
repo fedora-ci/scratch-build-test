@@ -1,6 +1,21 @@
 #!/bin/bash
 
-trap "exit 1" TERM
+email_cleanup_exit()
+{
+    ecode=$1
+    body=`mktemp`
+    echo "--------------------------------" >> $body
+    env | sort >> $body
+    echo "--------------------------------" >> $body
+    mail -s "FEDORA Scratch build test run ($nvr, $release -> $ecode)" < $body  ||\
+        echo "ERROR: Sending mail failed."
+    rm -f $body
+    hostname
+    tail -100 /var/log/maillog ||:
+    exit $ecode
+}
+
+trap "email_cleanup_exit 1" TERM
 export TOP_PID=$$
 
 # Scratch-build components in a side-tag
@@ -52,6 +67,10 @@ fi
 
 set -x
 
+# set up email support
+dnf --skip-broken -y install mailx sendmail
+systemctl start sendmail.service
+
 # components under rebuild test
 if [[ ${nvrs} == *systemtap* ]]; then
     # Skip building qemu, since it builds too long for a gating test
@@ -66,6 +85,10 @@ fi
 
 # supported architectures
 testarches="aarch64 i686 ppc64le s390x x86_64"
+
+# reduced test matrix for debugging purposes
+# components="colorgcc"
+# testarches="x86_64"
 
 # place to store the buildsystem test logs
 testlogdir=`mktemp -d`
@@ -126,6 +149,7 @@ testresult()
         echo "FAIL"
     else
         echo "ERROR: Missing expected pattern in ${_log}" 1>&2
+        cat ${_log} | sed 's/.*/>\ \0/' 1>&2
         kill -s TERM $TOP_PID
     fi
 }
