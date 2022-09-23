@@ -3,18 +3,18 @@
 email_cleanup_exit()
 {
     ecode=$1
-    body=`mktemp`
-    echo "--------------------------------" >> $body
-    /usr/bin/env | sort >> $body
-    echo "--------------------------------" >> $body
-    set -x
-    mail -s "FEDORA Scratch build test run ($nvrs, $release -> $ecode)" -r mcermak@redhat.com mcermak@redhat.com < $body  ||\
-        echo "ERROR: Sending mail failed."
-    rm -f $body
-    hostname
-    sleep 30
-    cat /var/log/maillog
-    fgrep mcermak /var/log/maillog ||:
+    # body=`mktemp`
+    # echo "--------------------------------" >> $body
+    # /usr/bin/env | sort >> $body
+    # echo "--------------------------------" >> $body
+    # set -x
+    # mail -s "FEDORA Scratch build test run ($nvrs, $release -> $ecode)" -r mcermak@redhat.com mcermak@redhat.com < $body  ||\
+    #     echo "ERROR: Sending mail failed."
+    # rm -f $body
+    # hostname
+    # sleep 30
+    # cat /var/log/maillog
+    # fgrep mcermak /var/log/maillog ||:
     exit $ecode
 }
 
@@ -70,19 +70,19 @@ fi
 
 set -x
 
-# set up email support
-dnf --skip-broken -y install mailx sendmail
-myip=$(ip a | fgrep glo | fgrep -v 192 | tr '/' ' ' | awk '{print $2}')
-myhostname=$(hostname)
-echo "$myip localhost.localdomain localhost $myhostname" >> /etc/hosts
-echo "127.0.0.1 localhost.localdomain localhost $myhostname" >> /etc/hosts
-cat /etc/hosts
-systemctl stop sendmail.service
-systemctl start sendmail.service
-systemctl status sendmail.service
-
-# Test and debug the email notification feature
-email_cleanup_exit 0
+# # set up email support
+# dnf --skip-broken -y install mailx sendmail
+# myip=$(ip a | fgrep glo | fgrep -v 192 | tr '/' ' ' | awk '{print $2}')
+# myhostname=$(hostname)
+# echo "$myip localhost.localdomain localhost $myhostname" >> /etc/hosts
+# echo "127.0.0.1 localhost.localdomain localhost $myhostname" >> /etc/hosts
+# cat /etc/hosts
+# systemctl stop sendmail.service
+# systemctl start sendmail.service
+# systemctl status sendmail.service
+# 
+# # Test and debug the email notification feature
+# email_cleanup_exit 0
 
 # components under rebuild test
 if [[ ${nvrs} == *systemtap* ]]; then
