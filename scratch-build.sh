@@ -7,7 +7,7 @@ email_cleanup_exit()
     echo "--------------------------------" >> $body
     env | sort >> $body
     echo "--------------------------------" >> $body
-    mail -s "FEDORA Scratch build test run ($nvr, $release -> $ecode)" < $body  ||\
+    mail -s "FEDORA Scratch build test run ($nvr, $release -> $ecode)" -r mcermak@redhat.com mcermak@redhat.com < $body  ||\
         echo "ERROR: Sending mail failed."
     rm -f $body
     hostname
