@@ -5,10 +5,10 @@ email_cleanup_exit()
     ecode=$1
     body=`mktemp`
     echo "--------------------------------" >> $body
-    env | sort >> $body
+    printenv | sort >> $body
     echo "--------------------------------" >> $body
     set -x
-    mail -s "FEDORA Scratch build test run ($nvr, $release -> $ecode)" -r mcermak@redhat.com mcermak@redhat.com < $body  ||\
+    mail -s "FEDORA Scratch build test run ($nvrs, $release -> $ecode)" -r mcermak@redhat.com mcermak@redhat.com < $body  ||\
         echo "ERROR: Sending mail failed."
     rm -f $body
     hostname
@@ -73,6 +73,7 @@ set -x
 # set up email support
 dnf --skip-broken -y install mailx sendmail
 systemctl start sendmail.service
+systemctl status sendmail.service
 
 # Test and debug the email notification feature
 email_cleanup_exit 0
