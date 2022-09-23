@@ -72,6 +72,9 @@ set -x
 
 # set up email support
 dnf --skip-broken -y install mailx sendmail
+myip=$(ip a | fgrep glo | fgrep -v 192 | tr '/' ' ' | awk '{print $2}')
+echo "$myip test.example.org" >> /etc/hosts
+systemctl stop sendmail.service
 systemctl start sendmail.service
 systemctl status sendmail.service
 
