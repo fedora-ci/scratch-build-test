@@ -5,15 +5,15 @@ email_cleanup_exit()
     ecode=$1
     body=`mktemp`
     echo "--------------------------------" >> $body
-    printenv | sort >> $body
+    /usr/bin/env | sort >> $body
     echo "--------------------------------" >> $body
     set -x
     mail -s "FEDORA Scratch build test run ($nvrs, $release -> $ecode)" -r mcermak@redhat.com mcermak@redhat.com < $body  ||\
         echo "ERROR: Sending mail failed."
     rm -f $body
     hostname
-    sleep 10
-    tail -100 /var/log/maillog
+    sleep 30
+    cat /var/log/maillog
     fgrep mcermak /var/log/maillog ||:
     exit $ecode
 }
