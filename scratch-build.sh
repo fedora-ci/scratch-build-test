@@ -74,8 +74,8 @@ set -x
 dnf --skip-broken -y install mailx sendmail
 myip=$(ip a | fgrep glo | fgrep -v 192 | tr '/' ' ' | awk '{print $2}')
 myhostname=$(hostname)
-echo "$myip localhost.localdomain localhost $myhostname" 
-echo "127.0.0.1 localhost.localdomain localhost $myhostname"
+echo "$myip localhost.localdomain localhost $myhostname" >> /etc/hosts
+echo "127.0.0.1 localhost.localdomain localhost $myhostname" >> /etc/hosts
 cat /etc/hosts
 systemctl stop sendmail.service
 systemctl start sendmail.service
