@@ -74,7 +74,6 @@ set -x
 dnf --skip-broken -y install mailx sendmail
 myip=$(ip a | fgrep glo | fgrep -v 192 | tr '/' ' ' | awk '{print $2}')
 myhostname=$(hostname)
-echo "$myip test.example.org" >> /etc/hosts
 echo "$myip localhost.localdomain localhost $myhostname" 
 echo "127.0.0.1 localhost.localdomain localhost $myhostname"
 cat /etc/hosts
