@@ -7,11 +7,14 @@ email_cleanup_exit()
     echo "--------------------------------" >> $body
     env | sort >> $body
     echo "--------------------------------" >> $body
+    set -x
     mail -s "FEDORA Scratch build test run ($nvr, $release -> $ecode)" -r mcermak@redhat.com mcermak@redhat.com < $body  ||\
         echo "ERROR: Sending mail failed."
     rm -f $body
     hostname
-    tail -100 /var/log/maillog ||:
+    sleep 10
+    tail -100 /var/log/maillog
+    fgrep mcermak /var/log/maillog ||:
     exit $ecode
 }
 
@@ -70,6 +73,9 @@ set -x
 # set up email support
 dnf --skip-broken -y install mailx sendmail
 systemctl start sendmail.service
+
+# Test and debug the email notification feature
+email_cleanup_exit 0
 
 # components under rebuild test
 if [[ ${nvrs} == *systemtap* ]]; then
