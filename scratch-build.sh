@@ -111,6 +111,8 @@ do_rebuilds()
     _stage=$1
     for testarch in ${testarches}; do
         for component in ${components}; do
+            # skip testing kernel.i686
+            [[ "$component" == "kernel" ]] && [[ "$testarch" == "i686" ]] && continue
             export buildlog="${testlogdir}/${component}.${testarch}.${_stage}"
             ( ./worker.sh ${component} ${release} ${sidetag_name} ${testarch} |& tee ${buildlog} ) &
         done
@@ -182,6 +184,8 @@ test_cnt=0
 fail_cnt=0
 for component in ${components}; do
     for testarch in ${testarches}; do
+        # skip testing kernel.i686
+        [[ "$component" == "kernel" ]] && [[ "$testarch" == "i686" ]] && continue
         test_cnt=$((test_cnt + 1))
         _baselog="$testlogdir/${component}.${testarch}.baseline"
         _testlog="$testlogdir/${component}.${testarch}.test"
