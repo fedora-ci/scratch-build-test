@@ -8,7 +8,7 @@ def artifactId
 def allBuilds
 
 
-// testcase name: baseos-qe.koji-build.scratch-build.validation
+// testcase name: baseos-qe.koji-build.copr-build.validation
 def pipelineMetadata = [
     pipelineName: 'scratch-build-test',
     pipelineDescription: 'Scratch-build components in Koji',
@@ -34,24 +34,24 @@ pipeline {
         skipDefaultCheckout()
     }
 
-    // triggers {
-    //    ciBuildTrigger(
-    //        noSquash: true,
-    //        providerList: [
-    //            rabbitMQSubscriber(
-    //                name: 'RabbitMQ-public',
-    //                overrides: [
-    //                    topic: 'org.fedoraproject.prod.bodhi.update.status.testing.koji-build-group.build.complete',
-    //                    queue: '8d8bb00d-03d6-48e1-936a-05d22c728224'
-    //                ],
-    //                checks: [
-    //                    [field: '$.artifact.release', expectedValue: '^f3[4-9]{1}$'],
-    //                    [field: '$.artifact.builds[0].component', expectedValue: '^(annobin|binutils|glibc|gcc|llvm|clang|systemtap|redhat-rpm-config)$']
-    //                ]
-    //            )
-    //        ]
-    //    )
-    // }
+    triggers {
+       ciBuildTrigger(
+           noSquash: true,
+           providerList: [
+               rabbitMQSubscriber(
+                   name: 'RabbitMQ-public',
+                   overrides: [
+                       topic: 'org.fedoraproject.prod.bodhi.update.status.testing.koji-build-group.build.complete',
+                       queue: '8d8bb00d-03d6-48e1-936a-05d22c728224'
+                   ],
+                   checks: [
+                       [field: '$.artifact.release', expectedValue: '^f3[4-9]{1}$'],
+                       [field: '$.artifact.builds[0].component', expectedValue: '^(colorgcc)$']
+                   ]
+               )
+           ]
+       )
+    }
 
     parameters {
         string(name: 'CI_MESSAGE', defaultValue: '{}', description: 'CI Message')
