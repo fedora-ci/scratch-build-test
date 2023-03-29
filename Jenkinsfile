@@ -42,7 +42,7 @@ pipeline {
                    name: 'RabbitMQ-public',
                    overrides: [
                        topic: 'org.fedoraproject.prod.bodhi.update.status.testing.koji-build-group.build.complete',
-                       queue: '8d8bb00d-03d6-48e1-936a-05d22c728224'
+                       queue: '8d8bb00d-03d6-48e1-936a-05d22c728345'
                    ],
                    checks: [
                        [field: '$.artifact.release', expectedValue: '^f3[4-9]{1}$'],
