@@ -53,7 +53,8 @@ kinit -k -t ${KOJI_KEYTAB} ${KRB_PRINCIPAL}
 
 id
 
-echo $COPR_CONFIG
+mkdir -p ~/.config
+cat $COPR_CONFIG > ~/.config/copr
 md5sum $COPR_CONFIG
 
 cp dejagnu-1.6.3-6.fc38.src.rpm /tmp/
