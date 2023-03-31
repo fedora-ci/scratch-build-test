@@ -5,5 +5,4 @@ packages:
 build_id: 0
 revdeps:
   list:
-    - ltrace
-    - memstomp
+    - colorgcc
