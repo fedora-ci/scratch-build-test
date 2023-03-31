@@ -89,6 +89,7 @@ pipeline {
                 KOJI_KEYTAB = credentials('fedora-keytab')
                 KRB_PRINCIPAL = 'bpeck/jenkins-continuous-infra.apps.ci.centos.org@FEDORAPROJECT.ORG'
                 DIST_GIT_URL = 'https://src.fedoraproject.org'
+                COPR_CONFIG = credentials('c9030754-3794-4f90-988b-42478fc36d4b')
             }
 
             steps {

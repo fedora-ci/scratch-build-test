@@ -53,8 +53,8 @@ kinit -k -t ${KOJI_KEYTAB} ${KRB_PRINCIPAL}
 
 id
 
-echo $DISTROLIBRIUM_FOLLOWER_KOJI_KERBEROS_KEYTAB
-md5sum $DISTROLIBRIUM_FOLLOWER_KOJI_KERBEROS_KEYTAB
+echo $COPR_CONFIG
+md5sum $COPR_CONFIG
 
 cp dejagnu-1.6.3-6.fc38.src.rpm /tmp/
 cp -r .mpb ~/
