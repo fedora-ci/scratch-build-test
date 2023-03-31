@@ -53,6 +53,9 @@ kinit -k -t ${KOJI_KEYTAB} ${KRB_PRINCIPAL}
 
 id
 
+echo $DISTROLIBRIUM_FOLLOWER_KOJI_KERBEROS_KEYTAB
+md5sum $DISTROLIBRIUM_FOLLOWER_KOJI_KERBEROS_KEYTAB
+
 cp dejagnu-1.6.3-6.fc38.src.rpm /tmp/
 cp -r .mpb ~/
 mpb ||:
