@@ -96,7 +96,7 @@ pipeline {
 
                 sendMessage(type: 'running', artifactId: artifactId, pipelineMetadata: pipelineMetadata, dryRun: isPullRequest())
                 script {
-                    sh("./scratch-build.sh ${allBuilds} ${msg['artifact']['release']}")
+                    sh("./mass-prebuild.sh ${allBuilds} ${msg['artifact']['release']}")
                 }
             }
         }
