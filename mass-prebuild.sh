@@ -39,23 +39,22 @@ true ==========================================================================
 #     test -f /goon && break
 # done
 
-if [ -z "${KOJI_KEYTAB}" ]; then
-    echo "Missing keytab, cannot continue..."
-    exit 101
-fi
-
-if [ -z "${KRB_PRINCIPAL}" ]; then
-    echo "Missing kerberos principal, cannot continue..."
-    exit 102
-fi
-
-kinit -k -t ${KOJI_KEYTAB} ${KRB_PRINCIPAL}
-
-id
+# if [ -z "${KOJI_KEYTAB}" ]; then
+#     echo "Missing keytab, cannot continue..."
+#     exit 101
+# fi
+# 
+# if [ -z "${KRB_PRINCIPAL}" ]; then
+#     echo "Missing kerberos principal, cannot continue..."
+#     exit 102
+# fi
+# 
+# kinit -k -t ${KOJI_KEYTAB} ${KRB_PRINCIPAL}
+# 
+# id
 
 mkdir -p ~/.config
 cat $COPR_CONFIG > ~/.config/copr
-md5sum $COPR_CONFIG
 
 cp dejagnu-1.6.3-6.fc38.src.rpm /tmp/
 cp -r .mpb ~/
