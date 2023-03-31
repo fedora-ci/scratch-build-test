@@ -56,7 +56,6 @@ true ==========================================================================
 mkdir -p ~/.config
 cat $COPR_CONFIG > ~/.config/copr
 
-cp dejagnu-1.6.3-6.fc38.src.rpm /tmp/
 cp -r .mpb ~/
 mpb ||:
 cat /root/.mpb/mpb.log
