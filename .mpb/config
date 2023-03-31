@@ -1,0 +1,9 @@
+packages:
+  autoconf:
+    src_type: file
+    src: /tmp/dejagnu-1.6.3-6.fc38.src.rpm
+build_id: 0
+revdeps:
+  list:
+    - ltrace
+    - memstomp
