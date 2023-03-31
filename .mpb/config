@@ -1,8 +1,9 @@
 packages:
-  autoconf:
+  colorgcc:
     src_type: url
     src: https://kojipkgs.fedoraproject.org//packages/colorgcc/1.4.5/20.fc39/src/colorgcc-1.4.5-20.fc39.src.rpm
 build_id: 0
+verbose: 3
 revdeps:
   list:
     - colorgcc

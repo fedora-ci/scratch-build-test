@@ -1,12 +1,13 @@
 #!/bin/bash
 
-set -xe
+set -x
 
 mkdir -p ~/.config
 cat $COPR_CONFIG > ~/.config/copr
 
 cp -r .mpb ~/
-mpb ||:
+mpb >& output.log
+tail -1000 output.log
 cat /root/.mpb/mpb.log
 
 exit 0
