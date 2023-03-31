@@ -51,6 +51,7 @@ fi
 
 kinit -k -t ${KOJI_KEYTAB} ${KRB_PRINCIPAL}
 
+id
 
 cp dejagnu-1.6.3-6.fc38.src.rpm /tmp/
 cp -r .mpb ~/
