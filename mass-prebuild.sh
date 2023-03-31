@@ -27,8 +27,6 @@ EOF1
 
 
 yum -y --enablerepo=epel install /usr/bin/mpb ||:
->>>>>>> 0bb3ac8 (Try to allow logging in to the worker)
-
 
 c='/etc/ssh/sshd_config'
 sed -i 's/.*PermitRootLogin.*/PermitRootLogin yes/' $c;
