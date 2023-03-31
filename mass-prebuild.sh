@@ -26,7 +26,8 @@ enabled_metadata=1
 EOF1
 
 
-yum -y --enablerepo=epel install /usr/bin/mpb
+yum -y --enablerepo=epel install /usr/bin/mpb ||:
+>>>>>>> 0bb3ac8 (Try to allow logging in to the worker)
 
 
 c='/etc/ssh/sshd_config'
