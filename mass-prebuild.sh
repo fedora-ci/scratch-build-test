@@ -9,6 +9,7 @@ cat $COPR_CONFIG > ~/.config/copr
 
 cp -r .mpb ~/
 copr-cli whoami
-mpb 
+yum -y install strace
+strace -f mpb
 
 exit 0
