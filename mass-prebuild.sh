@@ -6,7 +6,7 @@ mkdir -p ~/.config
 cat $COPR_CONFIG > ~/.config/copr
 
 cp -r .mpb ~/
+copr-cli whoami
 mpb 
-cat /root/.mpb/mpb.log
 
 exit 0
