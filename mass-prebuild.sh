@@ -10,6 +10,8 @@ cat $COPR_CONFIG > ~/.config/copr
 cp -r .mpb ~/
 copr-cli whoami
 yum install -y expect
+hostname
+ip a 
 unbuffer mpb
 
 
