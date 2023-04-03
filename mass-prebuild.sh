@@ -2,6 +2,8 @@
 
 set -x
 
+rm -rf ~/.cache/copr/*
+
 mkdir -p ~/.config
 cat $COPR_CONFIG > ~/.config/copr
 
