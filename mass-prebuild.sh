@@ -9,7 +9,8 @@ cat $COPR_CONFIG > ~/.config/copr
 
 cp -r .mpb ~/
 copr-cli whoami
-mpb 2>&1
+yum install -y expect
+unbuffer mpb
 
 
 
