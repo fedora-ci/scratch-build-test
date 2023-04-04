@@ -38,6 +38,8 @@ revdeps:
 EOFB
 
 export HOME=${HOME:-/root}
+export SHELL=${SHELL:-/bin/bash}
+
 
 rpm -q toolbox || \
 	dnf -y install --enablerepo=epel toolbox
