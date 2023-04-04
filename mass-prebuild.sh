@@ -37,6 +37,8 @@ revdeps:
     - colorgcc
 EOFB
 
+export HOME=${HOME:-/root}
+
 rpm -q toolbox || \
 	dnf -y install --enablerepo=epel toolbox
 toolbox list -vvvv 
