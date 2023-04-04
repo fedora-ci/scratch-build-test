@@ -2,18 +2,11 @@
 
 set -x
 
-rm -rf ~/.cache/copr/*
+FEDRELEASE=38
 
+rm -rf ~/.cache/copr/*
 mkdir -p ~/.config
 cat $COPR_CONFIG > ~/.config/copr
-
-#cp -r .mpb ~/
-# yum install -y expect
-# hostname
-# ip a
-# unbuffer mpb
-
-FEDRELEASE=38
 
 cat > work.sh <<EOFA
 #!/bin/bash
@@ -40,14 +33,11 @@ EOFB
 export HOME=${HOME:-/root}
 export SHELL=${SHELL:-/bin/bash}
 
-
 rpm -q toolbox || \
 	dnf -y install --enablerepo=epel toolbox
 toolbox list -vvvv 
 toolbox list | fgrep fedora-toolbox-${FEDRELEASE} || \
 	toolbox -y create --distro fedora --release ${FEDRELEASE}
 toolbox run --container fedora-toolbox-${FEDRELEASE} bash work.sh
-
-
 
 exit 0
