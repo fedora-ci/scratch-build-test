@@ -39,7 +39,7 @@ EOFB
 
 rpm -q toolbox || \
 	dnf -y install --enablerepo=epel toolbox
-mkdir -p ~/.config/toolbox
+toolbox list -vvvv 
 toolbox list | fgrep fedora-toolbox-${FEDRELEASE} || \
 	toolbox create --distro fedora --release ${FEDRELEASE}
 toolbox run --container fedora-toolbox-${FEDRELEASE} bash work.sh
