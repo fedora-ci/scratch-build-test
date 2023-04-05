@@ -53,15 +53,19 @@ SRPM=$(readlink -f *.src.rpm)
 mkdir .mpb
 cat > .mpb/config <<EOFB
 packages:
-  colorgcc:
+  glibc:
     src_type: file
     src: $SRPM
 build_id: 0
 verbose: 5
 revdeps:
   list:
-    - colorgcc:
+    - kernel:
       committish: '@last_build'
+    - lua
+    - opencryptoki
+    - strace
+    - '@critical-path-base'
 EOFB
 
 cat .mpb/config

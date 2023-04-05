@@ -46,7 +46,7 @@ pipeline {
                    ],
                    checks: [
                        [field: '$.artifact.release', expectedValue: '^f3[4-9]{1}$'],
-                       [field: '$.artifact.builds[0].component', expectedValue: '^(colorgcc)$']
+                       [field: '$.artifact.builds[0].component', expectedValue: '^(glibc)$']
                    ]
                )
            ]
