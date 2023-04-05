@@ -30,7 +30,9 @@ PKGLIST=''
 for i in toolbox yamllint; do
     rpm -q $i || PKGLIST="$PKGLIST $i"
 done
-dnf -y install --enablerepo=epel $PKGLIST
+if [ "x$PKGLIST" != "x" ]; then
+    dnf -y install --enablerepo=epel $PKGLIST
+fi
 
 rm -rf ~/.cache/copr/*
 mkdir -p ~/.config
