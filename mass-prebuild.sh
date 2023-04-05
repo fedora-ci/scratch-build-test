@@ -53,10 +53,12 @@ build_id: 0
 verbose: 5
 revdeps:
   list:
-    - colorgcc
+    - colorgcc:
+      committish: '@last_build'
 EOFB
 
 cat .mpb/config
+yamllint .mpb/config
 
 export HOME=${HOME:-/root}
 export SHELL=${SHELL:-/bin/bash}
