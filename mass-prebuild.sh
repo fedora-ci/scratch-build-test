@@ -63,8 +63,12 @@ yamllint .mpb/config
 export HOME=${HOME:-/root}
 export SHELL=${SHELL:-/bin/bash}
 
-rpm -q toolbox || \
-	dnf -y install --enablerepo=epel toolbox
+PKGLIST=''
+for i in toolbox yamllint; do
+    rpm -q $i || PKGLIST="$PKGLIST $i"
+done
+dnf -y install --enablerepo=epel $PKGLIST
+
 # toolbox list -vvvv 
 toolbox list | fgrep fedora-toolbox-${FEDRELEASE} || \
 	toolbox -y create --distro fedora --release ${FEDRELEASE}
