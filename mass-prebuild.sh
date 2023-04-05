@@ -56,6 +56,8 @@ revdeps:
     - colorgcc
 EOFB
 
+cat .mpb/config
+
 export HOME=${HOME:-/root}
 export SHELL=${SHELL:-/bin/bash}
 
