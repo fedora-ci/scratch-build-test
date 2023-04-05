@@ -26,6 +26,11 @@ if [ -z "${COPR_CONFIG}" ]; then
     exit 101
 fi
 
+PKGLIST=''
+for i in toolbox yamllint; do
+    rpm -q $i || PKGLIST="$PKGLIST $i"
+done
+dnf -y install --enablerepo=epel $PKGLIST
 
 rm -rf ~/.cache/copr/*
 mkdir -p ~/.config
@@ -62,12 +67,6 @@ yamllint .mpb/config
 
 export HOME=${HOME:-/root}
 export SHELL=${SHELL:-/bin/bash}
-
-PKGLIST=''
-for i in toolbox yamllint; do
-    rpm -q $i || PKGLIST="$PKGLIST $i"
-done
-dnf -y install --enablerepo=epel $PKGLIST
 
 # toolbox list -vvvv 
 toolbox list | fgrep fedora-toolbox-${FEDRELEASE} || \
