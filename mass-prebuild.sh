@@ -50,7 +50,7 @@ cat /etc/redhat-release
 dnf -y copr enable fberat/mass-prebuild
 dnf -y install mass-prebuild copr-cli expect
 copr-cli whoami
-unbuffer mpb
+unbuffer mpb -c ~/.mpb/config
 EOFA
 
 # koji download-build $TESTBUILD --arch=src
