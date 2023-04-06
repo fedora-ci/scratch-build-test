@@ -67,11 +67,12 @@ build_id: 0
 verbose: 5
 revdeps:
   list:
-    - kernel
-    - lua
-    - opencryptoki
-    - strace
-    - '@critical-path-base'
+    kernel:
+      committish: '@last_build'
+    lua
+    opencryptoki
+    strace
+    '@critical-path-base'
 copr:
   additional_repos:
     - ${BUILD_URL}artifact/REPO/
