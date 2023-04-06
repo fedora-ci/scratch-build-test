@@ -57,8 +57,8 @@ EOFA
 # SRPM=$(readlink -f *.src.rpm)
 
 # Set up mass-prebuild tool
-mkdir .mpb
-cat > .mpb/config <<EOFB
+mkdir ~/.mpb
+cat > ~/.mpb/config <<EOFB
 packages:
   glibc:
     deps_only: true
@@ -76,8 +76,8 @@ copr:
   additional_repos:
     - ${BUILD_URL}artifact/REPO/
 EOFB
-cat .mpb/config
-yamllint .mpb/config
+cat ~/.mpb/config
+yamllint ~/.mpb/config
 
 # toolbox list -vvvv 
 toolbox list | fgrep fedora-toolbox-${FEDRELEASE} || \
