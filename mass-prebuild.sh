@@ -68,7 +68,6 @@ verbose: 5
 revdeps:
   list:
     - kernel:
-      committish: '@last_build'
     - lua
     - opencryptoki
     - strace
