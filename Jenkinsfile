@@ -115,8 +115,8 @@ pipeline {
         unstable {
             sendMessage(type: 'complete', artifactId: artifactId, pipelineMetadata: pipelineMetadata, dryRun: isPullRequest())
         }
-        // always {
-        //     archiveArtifacts artifacts 'REPO/'
-        // }
+        always {
+            archiveArtifacts artifacts: 'REPO/', fingerprint: true
+        }
     }
 }

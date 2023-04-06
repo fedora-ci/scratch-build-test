@@ -6,8 +6,8 @@ yum -y install createrepo
 
 TESTBUILD=$1
 
-mkdir REPO
-pushd REPO
+mkdir artifacts
+pushd artifacts
 true ===========================================================
 koji download-build $TESTBUILD --arch=x86_64 --arch=noarch
 createrepo .
