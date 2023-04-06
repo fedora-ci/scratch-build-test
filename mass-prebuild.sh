@@ -61,7 +61,7 @@ mkdir .mpb
 cat > .mpb/config <<EOFB
 packages:
   glibc:
-    deps_only: True
+    deps_only: true
 build_id: 0
 verbose: 5
 revdeps:
