@@ -99,6 +99,7 @@ pipeline {
                 script {
                     sh("./createrepo.sh ${allBuilds} ${msg['artifact']['release']}")
                 }
+                archiveArtifacts artifacts: 'REPO/', fingerprint: true
                 script {
                     sh("./mass-prebuild.sh ${allBuilds} ${msg['artifact']['release']}")
                 }
@@ -115,8 +116,8 @@ pipeline {
         unstable {
             sendMessage(type: 'complete', artifactId: artifactId, pipelineMetadata: pipelineMetadata, dryRun: isPullRequest())
         }
-        always {
-            archiveArtifacts artifacts: 'REPO/', fingerprint: true
-        }
+        // always {
+        //     archiveArtifacts artifacts: 'REPO/', fingerprint: true
+        // }
     }
 }
