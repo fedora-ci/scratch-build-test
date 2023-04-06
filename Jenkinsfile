@@ -99,6 +99,7 @@ pipeline {
                 script {
                     sh("./createrepo.sh ${allBuilds} ${msg['artifact']['release']}")
                 }
+                archiveArtifacts artifacts 'REPO'
                 script {
                     sh("./mass-prebuild.sh ${allBuilds} ${msg['artifact']['release']}")
                 }
