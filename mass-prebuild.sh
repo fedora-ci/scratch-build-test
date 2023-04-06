@@ -51,6 +51,7 @@ dnf -y copr enable fberat/mass-prebuild
 dnf -y install mass-prebuild copr-cli expect
 copr-cli whoami
 unbuffer mpb -c ~/.mpb/config
+test -e ~/.mpb/mpb.log && cat ~/.mpb/mpb.log
 EOFA
 
 # koji download-build $TESTBUILD --arch=src
