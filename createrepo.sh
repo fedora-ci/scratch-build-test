@@ -6,6 +6,7 @@ yum -y install createrepo
 
 TESTBUILD=$1
 
+rm -rf REPO
 mkdir REPO
 pushd REPO
 true ===========================================================

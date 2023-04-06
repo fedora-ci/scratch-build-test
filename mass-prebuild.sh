@@ -47,25 +47,22 @@ copr-cli whoami
 unbuffer mpb
 EOFA
 
-koji download-build $TESTBUILD --arch=src
-SRPM=$(readlink -f *.src.rpm)
+# koji download-build $TESTBUILD --arch=src
+# SRPM=$(readlink -f *.src.rpm)
 
 mkdir .mpb
 cat > .mpb/config <<EOFB
 packages:
-  glibc:
-    src_type: file
-    src: $SRPM
+  colorgcc:
+    deps_only: True
 build_id: 0
 verbose: 5
 revdeps:
   list:
-    - kernel:
-      committish: '@last_build'
-    - lua
-    - opencryptoki
-    - strace
-    - '@critical-path-base'
+    - colorgcc
+copr:
+  additional_repos:
+    - ${BUILD_URL}artifact/REPO/
 EOFB
 
 cat .mpb/config
