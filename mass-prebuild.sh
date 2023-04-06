@@ -27,23 +27,12 @@ if [ -z "${COPR_CONFIG}" ]; then
 fi
 
 PKGLIST=''
-for i in toolbox yamllint createrepo; do
+for i in toolbox yamllint; do
     rpm -q $i || PKGLIST="$PKGLIST $i"
 done
 if [ "x$PKGLIST" != "x" ]; then
     dnf -y install --enablerepo=epel $PKGLIST
 fi
-
-mkdir REPO
-pushd REPO
-true ===========================================================
-koji download-build $TESTBUILD --arch=x86_64 --arch=noarch
-createrepo .
-env | sort
-pwd
-true ===========================================================
-popd
-sleep 10m
 
 rm -rf ~/.cache/copr/*
 mkdir -p ~/.config
