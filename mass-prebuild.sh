@@ -67,7 +67,7 @@ build_id: 0
 verbose: 5
 revdeps:
   list:
-    - kernel:
+    - kernel
     - lua
     - opencryptoki
     - strace
