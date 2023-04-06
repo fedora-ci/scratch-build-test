@@ -3,8 +3,11 @@
 set -x
 
 FEDRELEASE=38
+TESTBUILD=${1}
 
-TESTBUILD=$1
+export HOME=${HOME:-/root}
+export SHELL=${SHELL:-/bin/bash}
+
 
 if [ -z "${TESTBUILD}" ]; then
     echo "Missing build to test, cannot continue..."
@@ -34,10 +37,13 @@ if [ "x$PKGLIST" != "x" ]; then
     dnf -y install --enablerepo=epel $PKGLIST
 fi
 
-rm -rf ~/.cache/copr/*
+rm -rvf ~/.{cache,mpb,config}
+
+# Set up copr config, namely user id hash
 mkdir -p ~/.config
 cat $COPR_CONFIG > ~/.config/copr
 
+# Set up the c8s worker
 cat > work.sh <<EOFA
 #!/bin/bash
 cat /etc/redhat-release
@@ -50,26 +56,28 @@ EOFA
 # koji download-build $TESTBUILD --arch=src
 # SRPM=$(readlink -f *.src.rpm)
 
+# Set up mass-prebuild tool
 mkdir .mpb
 cat > .mpb/config <<EOFB
 packages:
-  colorgcc:
+  glibc:
     deps_only: True
 build_id: 0
 verbose: 5
 revdeps:
   list:
-    - colorgcc
+    - kernel:
+      committish: '@last_build'
+    - lua
+    - opencryptoki
+    - strace
+    - '@critical-path-base'
 copr:
   additional_repos:
     - ${BUILD_URL}artifact/REPO/
 EOFB
-
 cat .mpb/config
 yamllint .mpb/config
-
-export HOME=${HOME:-/root}
-export SHELL=${SHELL:-/bin/bash}
 
 # toolbox list -vvvv 
 toolbox list | fgrep fedora-toolbox-${FEDRELEASE} || \
