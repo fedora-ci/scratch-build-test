@@ -69,10 +69,14 @@ revdeps:
   list:
     kernel:
       committish: '@last_build'
-    lua
-    opencryptoki
-    strace
-    '@critical-path-base'
+    lua:
+      committish: '@last_build'
+    opencryptoki:
+      committish: '@last_build'
+    strace:
+      committish: '@last_build'
+    '@critical-path-base':
+      committish: '@last_build'
 copr:
   additional_repos:
     - ${BUILD_URL}artifact/REPO/
