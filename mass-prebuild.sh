@@ -46,12 +46,19 @@ cat $COPR_CONFIG > ~/.config/copr
 # Set up the c8s worker
 cat > work.sh <<EOFA
 #!/bin/bash
+set -x
 cat /etc/redhat-release
 dnf -y copr enable fberat/mass-prebuild
 dnf -y install mass-prebuild copr-cli expect
 copr-cli whoami
-unbuffer mpb -c ~/.mpb/config
+unbuffer mpb |& tee ~/output.log
 test -e ~/.mpb/mpb.log && cat ~/.mpb/mpb.log
+true "v_v_v_v_v_v_v_v_v_v_v_v_v_v_v_v_v_v_v_v_v_v_v_v_v_v_v_v_v_v_v_v_v_v_v_v_v"
+bi=\$(cat ~/output.log | tr '"' ' ' | awk '/mpb --buildid/ {print \$3; exit}')
+rm -fv mpb*report.md
+mpb-report --buildid \$bi --verbose
+cat mpb*report.md
+true "^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^-^"
 EOFA
 
 # koji download-build $TESTBUILD --arch=src
@@ -88,5 +95,8 @@ yamllint ~/.mpb/config
 toolbox list | fgrep fedora-toolbox-${FEDRELEASE} || \
 	toolbox -y create --distro fedora --release ${FEDRELEASE}
 toolbox run --container fedora-toolbox-${FEDRELEASE} bash work.sh
+
+
+
 
 exit 0
