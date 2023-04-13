@@ -51,7 +51,7 @@ cat /etc/redhat-release
 dnf -y copr enable fberat/mass-prebuild
 dnf -y install mass-prebuild copr-cli expect
 copr-cli whoami
-unbuffer mpb --info |& tee ~/_mpb.log
+unbuffer mpb |& tee ~/_mpb.log
 test -e ~/.mpb/mpb.log && cat ~/.mpb/mpb.log
 bi=\$(cat ~/_mpb.log | tr '"' ' ' | awk '/mpb --buildid/ {print \$3; exit}')
 rm -fv _test_protocol.log
