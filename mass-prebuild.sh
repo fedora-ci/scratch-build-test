@@ -113,6 +113,6 @@ cat _test_protocol.log |\
 # then the test as a whole PASSED.  Otherwise the test FAILED.
 cnt=$(cat _failed.log | wc -l)
 ecode=0
-test $cnt -gt 2 && ecode=1
+test $cnt -ne 2 && ecode=1
 
 exit $ecode
