@@ -49,7 +49,7 @@ cat > work.sh <<EOFA
 set -x
 cat /etc/redhat-release
 dnf -y copr enable fberat/mass-prebuild
-dnf -y install mass-prebuild copr-cli expect
+dnf --quiet -y install mass-prebuild copr-cli expect
 copr-cli whoami
 unbuffer mpb |& tee ~/_mpb.log
 test -e ~/.mpb/mpb.log && cat ~/.mpb/mpb.log
