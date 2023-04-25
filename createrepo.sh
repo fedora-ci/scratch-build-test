@@ -4,7 +4,7 @@ set -x
 
 TESTBUILD=$1
 
-yum -y install createrepo
+yum --quiet -y install createrepo
 
 rm -rf REPO
 mkdir REPO

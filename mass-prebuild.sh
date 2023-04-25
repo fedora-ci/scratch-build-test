@@ -37,7 +37,7 @@ if [ "x$PKGLIST" != "x" ]; then
     dnf -y install --enablerepo=epel $PKGLIST
 fi
 
-rm -rvf ~/.{cache,mpb,config}
+rm -rf ~/.{cache,mpb,config}
 
 # Set up copr config, namely user id hash
 mkdir -p ~/.config
@@ -54,7 +54,7 @@ copr-cli whoami
 unbuffer mpb |& tee ~/_mpb.log
 test -e ~/.mpb/mpb.log && cat ~/.mpb/mpb.log
 bi=\$(cat ~/_mpb.log | tr '"' ' ' | awk '/mpb --buildid/ {print \$3; exit}')
-rm -fv _test_protocol.log
+rm -f _test_protocol.log
 mpb-report --buildid \$bi --verbose --output _test_protocol.log
 EOFA
 
