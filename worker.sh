@@ -30,7 +30,11 @@ cd $_name
 fedpkg switch-branch $_branch || fedpkg switch-branch main
 
 # The strace testsuite is known for its flakiness. Disable it.
-test "$_name" == "strace" && sed -i '/^%check/a exit 0' strace.spec
+CMDLINE_SRPM=""
+if test "$_name" == "strace"; then
+    sed -i '/^%check/a exit 0' strace.spec
+    CMDLINE_SRPM="--srpm"
+fi
 
 if test "$_name" == "glibc" -o "$_name" == "qemu" && grep '^%dnl ' $_name.spec; then
     # The glibc specfile contains %dnl macros,
@@ -38,7 +42,7 @@ if test "$_name" == "glibc" -o "$_name" == "qemu" && grep '^%dnl ' $_name.spec; 
     sed -i '/^%dnl /'d $_name.spec
     fedpkg build --scratch --fail-fast --srpm --target=$_sidetag --arches=$_arches
 else
-    fedpkg build --scratch --fail-fast --target=$_sidetag --arches=$_arches
+    fedpkg build --scratch --fail-fast $CMDLINE_SRPM --target=$_sidetag --arches=$_arches
 fi
 popd
 rm -rf $_tmpd
