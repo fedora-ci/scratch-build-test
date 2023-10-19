@@ -29,21 +29,23 @@ cd $_name
 
 fedpkg switch-branch $_branch || fedpkg switch-branch main
 
-# The strace testsuite is known for its flakiness. Disable it.
+# Building specfile with uncommitted changes is possible with --srpm
 CMDLINE_SRPM=""
+
+# The strace testsuite is known for its flakiness. Disable it.
 if test "$_name" == "strace"; then
     sed -i '/^%check/a exit 0' strace.spec
     CMDLINE_SRPM="--srpm"
 fi
 
+# The glibc specfile contains %dnl macros, CentOS 8 fedpkg can't parse it.
 if test "$_name" == "glibc" -o "$_name" == "qemu" && grep '^%dnl ' $_name.spec; then
-    # The glibc specfile contains %dnl macros,
-    # CentOS 8 fedpkg can't parse it.
     sed -i '/^%dnl /'d $_name.spec
-    fedpkg build --scratch --fail-fast --srpm --target=$_sidetag --arches=$_arches
-else
-    fedpkg build --scratch --fail-fast $CMDLINE_SRPM --target=$_sidetag --arches=$_arches
+    CMDLINE_SRPM="--srpm"
 fi
+
+fedpkg build --scratch --fail-fast $CMDLINE_SRPM --target=$_sidetag --arches=$_arches
+
 popd
 rm -rf $_tmpd
 
