@@ -18,6 +18,11 @@ email_cleanup_exit()
     exit $ecode
 }
 
+
+echo "### UNDER CONSTRUCTION ###"
+env | sort
+exit 0
+
 trap "email_cleanup_exit 1" TERM
 export TOP_PID=$$
 
