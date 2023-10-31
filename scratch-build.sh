@@ -31,8 +31,8 @@ brew=koji
 if [ $# -ne 2 ]; then
     echo "Manually running scratch-build test..."
     echo "----------------------------------------------------------------"
-    read -p "Comma separated NVRs (e.g. gcc-11.2.1-6.1.el9) : " nvrs
-    read -p "target release (e.g. rhel-9.0.0) : " release
+    read -p "Comma separated NVRs (e.g. glibc-2.38.9000-17.fc40) : " nvrs
+    read -p "target release (e.g. f40) : " release
 else
     set -x
 

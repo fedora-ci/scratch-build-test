@@ -10,7 +10,7 @@ _arches=$4
 _tmpd=$(mktemp -d)
 pushd $_tmpd
 counter=0
-until fedpkg clone --anonymous --depth=1  $_name; do
+until fedpkg clone --anonymous $_name; do
     test $counter -gt 3 && break
     counter=$((counter + 1))
     sleep 120
