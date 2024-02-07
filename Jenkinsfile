@@ -45,8 +45,8 @@ pipeline {
                        queue: '8d8bb00d-03d6-48e1-936a-05d22c728224'
                    ],
                    checks: [
-                       [field: '$.artifact.release', expectedValue: '^f[3-9]{1}[0-9]{1}$'],
-                       [field: '$.artifact.builds[0].component', expectedValue: '^(annobin|binutils|glibc|gcc|llvm|clang|systemtap|redhat-rpm-config)$']
+                       [field: '$.update.release.dist_tag', expectedValue: '^f[3-9]{1}[0-9]{1}$'],
+                       [field: '$.artifact.builds[0].nvr', expectedValue: '^(annobin-|binutils-|glibc-|gcc-|llvm-|clang-|systemtap-|redhat-rpm-config-)$']
                    ]
                )
            ]
@@ -96,7 +96,7 @@ pipeline {
 
                 sendMessage(type: 'running', artifactId: artifactId, pipelineMetadata: pipelineMetadata, dryRun: isPullRequest())
                 script {
-                    sh("./scratch-build.sh ${allBuilds} ${msg['artifact']['release']}")
+                    sh("./scratch-build.sh ${allBuilds} ${msg['update']['release']['name'].toLowerCase()}")
                 }
             }
         }
