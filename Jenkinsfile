@@ -26,7 +26,7 @@ def pipelineMetadata = [
 pipeline {
 
     agent {
-        label 'node-generic-centos8-2'
+        label 'centos9'
     }
 
     options {
