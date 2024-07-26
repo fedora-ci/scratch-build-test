@@ -92,6 +92,8 @@ elif [[ ${nvrs} == *redhat-rpm-config* ]]; then
     components="zlib"
 elif [ ${nvrs} == llvm -o ${nvrs} == clang ]; then
     components="clang llvm kernel"
+elif [[ ${nvrs} == *binutils* ]]; then
+    components="kernel lua opencryptoki strace glibc"
 else
     components="kernel lua opencryptoki strace"
 fi
