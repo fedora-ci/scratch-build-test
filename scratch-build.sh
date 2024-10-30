@@ -139,7 +139,8 @@ date
 
 # wait for repo regeneration
 for nvr in ${nvrs//,/\ }; do
-    ${brew} wait-repo --build ${nvr} ${sidetag_name} || \
+    # The --request switch added in koji 1.35
+    ${brew} wait-repo --request --build ${nvr} ${sidetag_name} || \
     ${brew} wait-repo --build ${nvr} ${sidetag_name}
 done
 date
