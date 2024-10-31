@@ -137,6 +137,10 @@ for nvr in ${nvrs//,/\ }; do
 done
 date
 
+# try to explicitly request repo regen
+# https://github.com/fedora-ci/scratch-build-test/issues/9
+${brew} regen-repo ${sidetag_name} ||:
+
 # wait for repo regeneration
 for nvr in ${nvrs//,/\ }; do
     # The --request switch added in koji 1.35
