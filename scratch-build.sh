@@ -70,6 +70,10 @@ fi
 
 set -x
 
+# check available tooling
+cat /etc/os-release
+rpm -qa | fgrep -e coreutils -e koji -e fedpkg | sort
+
 # # set up email support
 # dnf --skip-broken -y install mailx sendmail
 # myip=$(ip a | fgrep glo | fgrep -v 192 | tr '/' ' ' | awk '{print $2}')
@@ -140,10 +144,6 @@ date
 # try to explicitly request repo regen
 # https://github.com/fedora-ci/scratch-build-test/issues/9
 ${brew} regen-repo ${sidetag_name} ||:
-
-# check available tooling
-cat /etc/os-release
-rpm -qa | fgrep -e coreutils -e koji -e fedpkg | sort
 
 # wait for repo regeneration
 for nvr in ${nvrs//,/\ }; do
