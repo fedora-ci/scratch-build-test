@@ -98,6 +98,8 @@ elif [ ${nvrs} == llvm -o ${nvrs} == clang ]; then
     components="clang llvm kernel"
 elif [[ ${nvrs} == *binutils* ]]; then
     components="kernel lua opencryptoki strace glibc"
+elif [[ ${nvrs} == *gcc* ]]; then
+    components="kernel lua opencryptoki strace emacs"
 else
     components="kernel lua opencryptoki strace"
 fi
