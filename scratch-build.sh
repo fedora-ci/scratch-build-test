@@ -100,6 +100,9 @@ elif [[ ${nvrs} == *binutils* ]]; then
     components="kernel lua opencryptoki strace glibc"
 elif [[ ${nvrs} == *gcc* ]]; then
     components="kernel lua opencryptoki strace emacs"
+elif [[ ${nvrs} == *glibc* ]]; then
+    # bz2368545 for python-pyside
+    components="kernel lua opencryptoki strace python-pyside6"
 else
     components="kernel lua opencryptoki strace"
 fi
