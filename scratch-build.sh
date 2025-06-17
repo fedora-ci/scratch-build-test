@@ -103,6 +103,9 @@ elif [[ ${nvrs} == *gcc* ]]; then
 elif [[ ${nvrs} == *glibc* ]]; then
     # bz2368545 for python-pyside
     components="kernel lua opencryptoki strace python-pyside6"
+elif [[ ${nvr} =~ (gdb|dwz|elfutils|debugedit) ]]; then
+    # RHEL-95452, RHEL-95453
+    components="debugedit"
 else
     components="kernel lua opencryptoki strace"
 fi

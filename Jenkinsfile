@@ -46,7 +46,7 @@ pipeline {
                    ],
                    checks: [
                        [field: '$.update.release.dist_tag', expectedValue: '^f[3-9]{1}[0-9]{1}$'],
-                       [field: '$.artifact.builds[0].nvr', expectedValue: '^(annobin-|binutils-|glibc-|gcc-|llvm-|clang-|systemtap-|redhat-rpm-config-).*$']
+                       [field: '$.artifact.builds[0].nvr', expectedValue: '^(annobin-|binutils-|glibc-|gcc-|llvm-|clang-|systemtap-|redhat-rpm-config-|gdb|dwz|elfutils|debugedit).*$']
                    ]
                )
            ]
