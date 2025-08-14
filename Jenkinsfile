@@ -92,6 +92,7 @@ pipeline {
             }
 
             steps {
+        		timeout(time: 12, unit: 'HOURS', activity: true)
                 checkout scm
 
                 sendMessage(type: 'running', artifactId: artifactId, pipelineMetadata: pipelineMetadata, dryRun: isPullRequest())
