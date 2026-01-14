@@ -74,6 +74,10 @@ set -x
 cat /etc/os-release
 rpm -qa | fgrep -e coreutils -e koji -e fedpkg | sort
 
+# workaround Koji 502 errors:
+# https://pagure.io/fedora-infrastructure/issue/12913#comment-993744
+echo "anon_retry = true" >> /etc/koji.conf
+
 # # set up email support
 # dnf --skip-broken -y install mailx sendmail
 # myip=$(ip a | fgrep glo | fgrep -v 192 | tr '/' ' ' | awk '{print $2}')
