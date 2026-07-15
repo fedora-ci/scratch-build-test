@@ -127,6 +127,8 @@ do_rebuilds()
         for component in ${components}; do
             # skip testing kernel.i686
             [[ "$component" == "kernel" ]] && [[ "$testarch" == "i686" ]] && continue
+            # skip testing opencryptoki.i686 (it's disabled in spec)
+            [[ "$component" == "opencryptoki" ]] && [[ "$testarch" == "i686" ]] && continue
             export buildlog="${testlogdir}/${component}.${testarch}.${_stage}"
             ( ./worker.sh ${component} ${release} ${sidetag_name} ${testarch} |& tee ${buildlog} ) &
         done
