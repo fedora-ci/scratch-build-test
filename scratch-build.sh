@@ -207,6 +207,8 @@ for component in ${components}; do
     for testarch in ${testarches}; do
         # skip testing kernel.i686
         [[ "$component" == "kernel" ]] && [[ "$testarch" == "i686" ]] && continue
+        # skip testing opencryptoki.i686 (it's disabled in spec)
+        [[ "$component" == "opencryptoki" ]] && [[ "$testarch" == "i686" ]] && continue
         test_cnt=$((test_cnt + 1))
         _baselog="$testlogdir/${component}.${testarch}.baseline"
         _testlog="$testlogdir/${component}.${testarch}.test"
